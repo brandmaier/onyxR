@@ -1,10 +1,8 @@
-parser.lavaan <- function(model) {
+parser.lavaan <- function(model, title="") {
 
 lstr <- lavaanify(model)
 
-name <- "Name"
-
-xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
+xml <- paste( "<model name=\"",title,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
 
 known <- list()
 

@@ -6,3 +6,4 @@ Author: Andreas M. Brandmaier
 Imports:
  OpenMx,
  lavaan
+Version: 0.01
