@@ -4,5 +4,5 @@ Title: Interface to call Onyx from R
 Date: 2016-12-06
 Author: Andreas M. Brandmaier
 Imports:
-	OpenMx
-	lavaan
+ OpenMx,
+ lavaan
