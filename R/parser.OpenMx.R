@@ -3,7 +3,7 @@
 # converter of OpenMx model into Onyxml
 #
 
-parser.OpenMx <- function(model, title)
+parser.OpenMx <- function(model, name)
 {
 	manifests <- model@manifestVars
 	latents <- model@latentVars
@@ -16,7 +16,7 @@ parser.OpenMx <- function(model, title)
 	triangleXml <- paste("<Node caption=\"one\" id=\"",triangleId,"\" constant=\"true\"/>\n",sep="");
 
 
-	xml <- paste( "<model name=\"",title,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
+	xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
 
 	xml <- paste (xml, "<!-- manifest variables -->\n",sep="")
 
