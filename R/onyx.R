@@ -1,5 +1,12 @@
+cacheEnv <- new.env()
+
+
 onyx<-function(model=NULL, onyxfile=NULL)
 {
+  # attempt to retrieve the onyxfile from the package's cache environment
+  # return NULL if nothing stored in cacheEnv
+  onyxfile <- get("onyxfile", envir=cacheEnv)
+  
   
   # the following part tries to find onyx.jar from command line arguments.
   # May be removed in future
@@ -21,6 +28,8 @@ onyx<-function(model=NULL, onyxfile=NULL)
     if (!file.exists(onyxfile)) {
       stop("Download failed!")
     }
+    # store the file reference in the package environment
+    assign("onyxfile",onyxfile, envir=cacheEnv)
   }
   
   # catches if onyx.jar is not available

@@ -1,1 +1,3 @@
-lavaanHS	Calling Onyx to display the HS model specified in lavaan
+lavaanHS	HS model specified in lavaan
+lavaanPD	lavaan political democracy dataset
+openmxFactor	Single factor model in OpenMx
