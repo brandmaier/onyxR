@@ -1,6 +1,6 @@
 parser.lavaan <- function(model, name="") {
 
-lstr <- lavaanify(model)
+lstr <- lavaanify(model, auto.var=TRUE)
 
 xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0-500\">\n<graph>\n",sep="");
 
@@ -54,7 +54,7 @@ for (i in 1:dim(lstr)[1]) {
   else {
     fixed <- "false"
     pname <- lstr$plabel[i]
-    pString <- paste("parameterName=\",pname,\"",sep="")
+    pString <- paste("parameterName=\"",pname,"\"",sep="")
   }
   
   
