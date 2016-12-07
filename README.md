@@ -19,9 +19,10 @@ textual =~ x4 + x5 + x6
 speed =~ x7 + x8 + 2*x9
 
 visual ~~ textual'
-```
 
 onyx(model)
+```
+
 
 ## Demo
 
