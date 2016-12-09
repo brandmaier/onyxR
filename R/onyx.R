@@ -43,8 +43,10 @@ onyx<-function(model=NULL, onyxfile=NULL)
 
 	if (inherits(model,"MxModel") || inherits(model,"MxRAMModel")) {
   		rep <- parser.OpenMx(model,"onyxR")
+	} else if (inherits(model,"lavaan")) {	
+  	  rep <- parser.lavaan(model,"onyxR")
 	} else {
-	  	rep <- parser.lavaan(model,"onyxR")
+	  	rep <- parser.lavaan(model,"onyxR", string.representations=TRUE)
 	}
   	fn <- tempfile()
   	cat(rep, file=fn)

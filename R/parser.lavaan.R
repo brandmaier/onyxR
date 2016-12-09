@@ -1,7 +1,10 @@
-parser.lavaan <- function(model, name="") {
+parser.lavaan <- function(model, name="", string.representations=FALSE) {
 
-lstr <- lavaanify(model, auto.var=TRUE)
-
+if (string.representations) {
+  lstr <- lavaanify(model, auto.var=TRUE)
+} else {
+  lstr <- lavaan::parameterTable(model)
+}
 xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0-500\">\n<graph>\n",sep="");
 
 known <- list()
@@ -20,6 +23,13 @@ for (i in 1:dim(lstr)[1]) {
   ustart <- lstr$ustart[i]
   latentleft <- TRUE
   latentright <- TRUE;
+  
+  if ("est" %in% names(lstr)) {
+    est <- lstr$est[i]
+  } else {
+    est <- NULL
+  }
+  
   if (op == "=~") { latentleft <- TRUE; latentright <- FALSE}
   
   if (isknown(left)) {
@@ -69,6 +79,10 @@ for (i in 1:dim(lstr)[1]) {
     if (value==0 && free==0) {
       value <- 1
     }
+  }
+  
+  if (!is.null(est)) {
+    value <- est
   }
   
   xml <- paste(xml,"<edge sourceNodeId=\"",lid,"\"  targetNodeId=\"",
