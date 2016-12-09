@@ -57,7 +57,7 @@ onyx<-function(model=NULL, onyxfile=NULL)
   }
   
   # system call depends on operating system
-  sysname <- Sys.info()[['sysname']
+  sysname <- Sys.info()[['sysname']]
   if (sysname=="Windows") {
     # OS that need to spawn a new shell explicitly should go here:
     system("cmd.exe", input = cmd, wait = FALSE)
