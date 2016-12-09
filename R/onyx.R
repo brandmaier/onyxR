@@ -27,7 +27,7 @@ onyx<-function(model=NULL, onyxfile=NULL)
     onyxfile <- tempfile(pattern="onyx_",
                          fileext=".jar")
     download.file(url="http://onyx.brandmaier.de/onyx-1.0-937.jar",
-                  destfile = onyxfile)
+                  destfile = onyxfile, mode="wb")
     if (!file.exists(onyxfile)) {
       stop("Download failed!")
     }
