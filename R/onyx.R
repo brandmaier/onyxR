@@ -5,7 +5,7 @@ onyx<-function(model=NULL, onyxfile=NULL)
 {
   # attempt to retrieve the onyxfile from the package's cache environment
   # return NULL if nothing stored in cacheEnv
-  onyxfile <- get("onyxfile", envir=cacheEnv)
+  onyxfile <- get0("onyxfile", envir=cacheEnv, ifnotfound=NULL)
   
   
   # the following part tries to find onyx.jar from command line arguments.
