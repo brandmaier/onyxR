@@ -3,6 +3,7 @@ cacheEnv <- new.env()
 
 onyx<-function(model=NULL, onyxfile=NULL)
 {
+ 
   # attempt to retrieve the onyxfile from the package's cache environment
   # return NULL if nothing stored in cacheEnv
   onyxfile <- get0("onyxfile", envir=cacheEnv, ifnotfound=NULL)
@@ -55,5 +56,14 @@ onyx<-function(model=NULL, onyxfile=NULL)
     cmd <- paste("java","-cp",onyxfile,"Master")
   }
   
-	system(cmd,wait=F)
+  # system call depends on operating system
+  sysname <- Sys.info()[['sysname']
+  if (sysname=="Windows") {
+    # OS that need to spawn a new shell explicitly should go here:
+    system("cmd.exe", input = cmd, wait = FALSE)
+  } else {  
+    # OS that spawn a new shell for each subprocess should go here
+	  system(cmd,wait=FALSE)
+  }
+  
 }
