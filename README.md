@@ -1,6 +1,10 @@
 # onyxR
 
-Calling Onyx GUI from R when using OpenMx or lavaan packages for SEM.
+An R package for calling Onyx GUI from R when using OpenMx or lavaan packages for Structural Equation Modelling.
+The package provides a simple onyx() function that takes either an OpenMx model or a lavaan model (either a
+fitted lavaan model or string specification). If a local onyx executable is available, its path can be passed to the function.
+Otherwise, it will attempt to download a copy of Onyx from the official repository. A recent version of
+JAVA (version 1.6+) is required to be installed on the system.
 
 ## Install
 
