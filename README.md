@@ -14,13 +14,15 @@ source('https://raw.githubusercontent.com/brandmaier/onyxR/master/tools/install.
 Using onyxR is as simple as that. In lavaan
 
 ````{r, eval=FALSE}
-model <-  'visual =~ x1 + 33*x2 + x3
-textual =~ x4 + x5 + x6
-speed =~ x7 + x8 + 2*x9
+HS.model <- ' visual  =~ x1 + x2 + x3 
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 '
 
-visual ~~ textual'
+fit <- cfa(HS.model, data = HolzingerSwineford1939)
 
-onyx(model)
+summary(fit, fit.measures = TRUE)
+
+onyx(fit)
 ```
 
 Alternatively, we can use onyxR to generate a path diagram for an OpenMx RAM-type model:
@@ -39,9 +41,9 @@ factorModel <- mxModel("One Factor",
                               free=FALSE, values=1.0),
                        mxData(cov(demoOneFactor), type="cov",
                               numObs=500))
-fitted.model <- mxRun(factorModel)
+fit <- mxRun(factorModel)
 
-onyx(fitted.model)
+onyx(fit)
 ```
 
 
