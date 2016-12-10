@@ -150,12 +150,11 @@ parser.OpenMx <- function(model, name)
 }
 
 
-cat("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-variables <- ls();
-for (i in 1:length(variables))
-{
-	if (class(eval(parse(text=variables[i]))) == "MxRAMModel"){
-		cat( parser(eval(parse(text=variables[i])), variables[i])  );
-		cat("\n")
-	}
-}
+#variables <- ls();
+#for (i in 1:length(variables))
+#{
+#	if (class(eval(parse(text=variables[i]))) == "MxRAMModel"){#
+#		cat( parser(eval(parse(text=variables[i])), variables[i])  );
+#		cat("\n")
+#	}
+#}#

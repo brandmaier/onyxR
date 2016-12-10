@@ -73,6 +73,10 @@ onyx<-function(model=NULL, onyxfile=NULL)
 	} else {
 	  	rep <- parser.lavaan(model,"onyxR", string.representations=TRUE)
 	}
+    
+    xmlhead <- "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+    rep <- paste(xmlhead, rep)
+    
   	fn <- tempfile()
   	cat(rep, file=fn)
   	cmd <- paste("java","-cp",onyxfile,"Master","--input-file ",fn)
