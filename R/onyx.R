@@ -6,20 +6,34 @@ onyx<-function(model=NULL, onyxfile=NULL)
  
   # attempt to retrieve the onyxfile from the package's cache environment
   # return NULL if nothing stored in cacheEnv
-  onyxfile <- get0("onyxfile", envir=cacheEnv, ifnotfound=NULL)
+  if (is.null(onyxfile)) {
+    onyxfile <- get0("onyxfile", envir=cacheEnv, ifnotfound=NULL)
+  }
   
+  # is there a local onyx file?
+  if (is.null(onyxfile)) {
+  files <- list.files()
+  hasonyx <- sapply(files, function(x){length(grep("onyx.*jar",x,value=FALSE))>0},simplify = TRUE)
+  if (sum(hasonyx) > 0) {
+    if (sum(hasonyx)>2) {
+      warning("Found several local onyx executables!")
+    }
+    idx <- which(hasonyx)[1]
+    onyxfile <- names(hasonyx)[idx]
+  }
+  }
   
   # the following part tries to find onyx.jar from command line arguments.
   # May be removed in future
-  if (is.null(onyxfile)) {
-    options <- commandArgs(trailingOnly = F)
-    filearg <- "--file="
- 
-    if (length(grep(filearg, options))!=0) {
-      onyxfile <- sub(filearg, "", options[grep(filearg, options)])
-    }
+  #if (is.null(onyxfile)) {
+  #  options <- commandArgs(trailingOnly = F)
+  #  filearg <- "--file="
+# 
+#    if (length(grep(filearg, options))!=0) {
+ #     onyxfile <- sub(filearg, "", options[grep(filearg, options)])
+  #  }
 
-  }
+  #}
   
   # if there is no Onyx jar, download it from official repository
   if (is.null(onyxfile)) {
