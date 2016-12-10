@@ -50,10 +50,18 @@ onyx<-function(model=NULL, onyxfile=NULL)
   }
   
   # catches if onyx.jar is not available
-  
-  if (!file.exists(onyxfile)) {
-    stop("Could not find Onyx executable (e.g., onyx.jar)! Please specify a path to the file or download Onyx from http:\\\\onyx.brandmaier.de.")
+
+  if (is.null(onyxfile)) {
+    stop("Could not find a valid Onyx executable (e.g., onyx.jar)!"+
+           "Please put Onyx in the local directory, specify a path to the file,"+
+           " or download Onyx from http:\\\\onyx.brandmaier.de.")
   }
+    
+  if (!file.exists(onyxfile)) {
+    stop(paste("Onyx executable does not exist: ",onyxfile))  
+  }
+  
+
   
   # stores onyx or lavaan parsed model in temp file and calls onyx with this file, or empty call. 
   if (!is.null(model)) {
