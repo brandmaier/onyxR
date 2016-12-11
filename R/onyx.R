@@ -1,5 +1,12 @@
 cacheEnv <- new.env()
 
+#' onyx
+#' 
+#' Starts Onyx
+#'
+#' @param model An OpenMx or lavaan model.
+#' @param onyyfile path to Onyx executable (onyx-***.jar). Defaults to NULL. If NULL, Onyx searches local directors, otherwise downloads Onyx from official repository.
+#'
 
 onyx<-function(model=NULL, onyxfile=NULL)
 {

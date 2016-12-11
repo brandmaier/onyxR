@@ -1,10 +1,12 @@
 Package: onyxR
 Type: Package
 Title: Interface to call Onyx from R
-Date: 2016-12-06
-Author: Andreas M. Brandmaier
+Date: 2016-12-11
+Author: Andreas M. Brandmaier <andy@brandmaier.de>
 Imports:
  OpenMx,
  lavaan
-Version: 0.01
+Version: 0.1
 License: LGPLv3
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,30 @@
+---
+title: "Path diagrams from OpenMx"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Path diagrams form OpenMx}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+````{r, eval=FALSE}
+data(demoOneFactor)
+manifests <- names(demoOneFactor)
+latents <- c("G")
+factorModel <- mxModel("One Factor",
+                       type="RAM",
+                       manifestVars = manifests,
+                       latentVars = latents,
+                       mxPath(from=latents, to=manifests),
+                       mxPath(from=manifests, arrows=2),
+                       mxPath(from=latents, arrows=2,
+                              free=FALSE, values=1.0),
+                       mxData(cov(demoOneFactor), type="cov",
+                              numObs=500))
+fit <- mxRun(factorModel)
+
+onyx(fit)
+```
+
+![openmx](https://github.com/brandmaier/onyxR/blob/master/inst/openmx-factor.png?raw=true)
