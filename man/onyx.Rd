@@ -34,5 +34,6 @@ fit <- mxRun(factorModel)
 \dontrun{
 onyx(fit)
 }
+
 }
 

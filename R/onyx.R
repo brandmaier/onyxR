@@ -27,7 +27,8 @@ cacheEnv <- new.env()
 #' \dontrun{
 #' onyx(fit)
 #' }
-
+#' 
+#' @export
 
 onyx<-function(model=NULL, onyxfile=NULL)
 {
