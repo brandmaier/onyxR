@@ -7,6 +7,27 @@ cacheEnv <- new.env()
 #' @param model An OpenMx or lavaan model.
 #' @param onyyfile path to Onyx executable (onyx-***.jar). Defaults to NULL. If NULL, Onyx searches local directors, otherwise downloads Onyx from official repository.
 #'
+#' @examples 
+#' 
+#' require(OpenMx)
+#' data(demoOneFactor)
+#' manifests <- names(demoOneFactor)
+#' latents <- c("G")
+#' factorModel <- mxModel("One Factor",
+#'                        type="RAM",
+#'                        manifestVars = manifests,
+#'                        latentVars = latents,
+#'                        mxPath(from=latents, to=manifests),
+#'                        mxPath(from=manifests, arrows=2),
+#'                        mxPath(from=latents, arrows=2,
+#'                               free=FALSE, values=1.0),
+#'                        mxData(cov(demoOneFactor), type="cov",
+#'                               numObs=500))
+#' fit <- mxRun(factorModel)
+#' \dontrun{
+#' onyx(fit)
+#' }
+
 
 onyx<-function(model=NULL, onyxfile=NULL)
 {
