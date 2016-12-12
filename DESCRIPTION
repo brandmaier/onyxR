@@ -5,7 +5,8 @@ Date: 2016-12-11
 Author: Andreas M. Brandmaier <andy@brandmaier.de>
 Imports:
     OpenMx,
-    lavaan
+    lavaan,
+    png
 Version: 0.1
 License: LGPLv3
 Suggests:

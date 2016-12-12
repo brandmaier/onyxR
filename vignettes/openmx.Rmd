@@ -9,6 +9,7 @@ vignette: >
 
 
 ````{r, eval=FALSE}
+require("onyxR")
 data(demoOneFactor)
 manifests <- names(demoOneFactor)
 latents <- c("G")

@@ -2,10 +2,13 @@ cacheEnv <- new.env()
 
 #' onyx
 #' 
-#' Starts Onyx
+#' Starts Onyx executable to display a path diagram from either an OpenMx or
+#' lavaan model representation.
 #'
-#' @param model An OpenMx or lavaan model.
+#' @param model An OpenMx or lavaan model. Defaults to NULL. If omitted, Onyx is started with an empty desktop, otherwise
+#' the specified model is rendered as path diagram
 #' @param onyyfile path to Onyx executable (onyx-***.jar). Defaults to NULL. If NULL, Onyx searches local directors, otherwise downloads Onyx from official repository.
+#' @param mode batch operation mode (experimental)
 #'
 #' @examples 
 #' 
@@ -30,7 +33,7 @@ cacheEnv <- new.env()
 #' 
 #' @export
 
-onyx<-function(model=NULL, onyxfile=NULL)
+onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
 {
  
   # attempt to retrieve the onyxfile from the package's cache environment
@@ -108,7 +111,15 @@ onyx<-function(model=NULL, onyxfile=NULL)
     
   	fn <- tempfile()
   	cat(rep, file=fn)
-  	cmd <- paste("java","-cp",onyxfile,"Master","--input-file ",fn)
+  	
+  	if (is.null(batch)) {
+    	cmd <- paste("java","-cp",onyxfile,"Master","--input-file ",fn)
+  	} else {
+  	  outf <- tempfile(fileext = ".png")
+  	  cmd <- paste("java -cp",onyxfile," Master --batch --output-filetype png --input-file",fn," --output-file",outf)
+
+  	}
+  	
   } else {
     cmd <- paste("java","-cp",onyxfile,"Master")
   }
@@ -121,6 +132,12 @@ onyx<-function(model=NULL, onyxfile=NULL)
   } else {  
     # OS that spawn a new shell for each subprocess should go here
 	  system(cmd,wait=FALSE)
+  }
+  
+  if (!is.null(mode)) {
+    rpng <- png::readPNG(outf, native=TRUE)
+    plot(c(0,100),c(0,100),type="n",xlab="",ylab="",axes = FALSE)
+    rasterImage(rpng,0,0,100,100)
   }
   
 }
