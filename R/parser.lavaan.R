@@ -9,6 +9,8 @@ xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specification
 
 known <- list()
 
+mean.idx <- NULL
+
 isknown <- function(key)
 {
   return(key %in% names(known))
@@ -32,6 +34,9 @@ for (i in 1:dim(lstr)[1]) {
   
   if (op == "=~") { latentleft <- TRUE; latentright <- FALSE}
   
+  meanpath <- FALSE
+  if (op == "~1") {meanpath <- TRUE}
+  
   if (isknown(left)) {
     lid <- known[[left]]
   } else {
@@ -42,32 +47,15 @@ for (i in 1:dim(lstr)[1]) {
     idx <- idx + 1
   }
   
-  if (isknown(right)) {
-      rid <- known[[right]]
-  } else {
-    xml <- paste(xml,"<Node caption=\"", right ,  "\" latent=\"",latentright,"\" id=\"",
-                 (idx),"\" />\n",sep="");
-    known[[right]] <- idx
-    rid <- idx
-    idx <- idx + 1
-  }
-  
-  if (op == "~~")
-    doubleheaded <- "true" 
-  else
-    doubleheaded <- "false"
-  
   if (free == 0) {
     fixed <- "true"
     pString <- ""
-    }
+  }
   else {
     fixed <- "false"
     pname <- lstr$plabel[i]
     pString <- paste("parameterName=\"",pname,"\"",sep="")
   }
-  
-  
   
   aString <- "arrowHead=\"1\" "#definitionVariable=\"false\""
   
@@ -85,9 +73,52 @@ for (i in 1:dim(lstr)[1]) {
     value <- est
   }
   
+  
+  if (meanpath) {
+    
+    if (is.null(mean.idx)) {
+        mean.idx <- idx
+        triangleXml <- paste("<Node caption=\"one\" id=\"",idx,"\" constant=\"true\"/>\n",sep="");
+        xml <- paste(xml, triangleXml)
+        idx <- idx + 1
+    }
+    
+    xml <- paste(xml,"<edge sourceNodeId=\"",mean.idx,"\"  targetNodeId=\"",
+                 lid,"\" doubleHeaded=\"false\" fixed=\"",fixed,"\" ",
+                 pString," ",aString, " value=\"",value,"\" />\n", sep="")
+    
+    
+  } else {
+    
+  
+  if (isknown(right)) {
+      rid <- known[[right]]
+  } else {
+    xml <- paste(xml,"<Node caption=\"", right ,  "\" latent=\"",latentright,"\" id=\"",
+                 (idx),"\" />\n",sep="");
+    known[[right]] <- idx
+    rid <- idx
+    idx <- idx + 1
+  }
+    
+
+  
+  if (op == "~~")
+    doubleheaded <- "true" 
+  else
+    doubleheaded <- "false"
+  
+
+  
+  
+  
+
+
   xml <- paste(xml,"<edge sourceNodeId=\"",lid,"\"  targetNodeId=\"",
     rid,"\" doubleHeaded=\"",doubleheaded,"\" fixed=\"",fixed,"\" ",
     pString," ",aString, " value=\"",value,"\" />\n", sep="")
+  
+  }
 } 
   
  

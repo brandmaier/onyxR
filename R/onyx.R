@@ -134,7 +134,7 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
 	  system(cmd,wait=FALSE)
   }
   
-  if (!is.null(mode)) {
+  if (!is.null(batch)) {
     rpng <- png::readPNG(outf, native=TRUE)
     plot(c(0,100),c(0,100),type="n",xlab="",ylab="",axes = FALSE)
     rasterImage(rpng,0,0,100,100)

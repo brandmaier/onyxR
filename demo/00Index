@@ -1,3 +1,4 @@
 lavaanHS	HS model specified in lavaan
 lavaanPD	lavaan political democracy dataset
 openmxFactor	Single factor model in OpenMx
+lavaanMediation Mediation model in lavaan
