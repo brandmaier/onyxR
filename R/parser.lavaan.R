@@ -42,6 +42,8 @@ for (i in 1:dim(lstr)[1]) {
   
   if (op == "=~") { latentleft <- TRUE; latentright <- FALSE}
   
+  if (op == ":=") next;
+  
   meanpath <- FALSE
   if (op == "~1") {meanpath <- TRUE}
   
