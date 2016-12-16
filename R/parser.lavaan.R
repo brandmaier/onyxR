@@ -7,6 +7,8 @@ if (string.representations) {
 }
 xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0-500\">\n<graph>\n",sep="");
 
+multigroup <- length(unique(lstr$group))>1
+
 known <- list()
 
 mean.idx <- NULL
@@ -14,6 +16,11 @@ mean.idx <- NULL
 isknown <- function(key)
 {
   return(key %in% names(known))
+}
+
+setknown <- function(key, value)
+{
+  known[[key]] <- value
 }
 
 idx <- 0
@@ -24,7 +31,8 @@ for (i in 1:dim(lstr)[1]) {
   free <- lstr$free[i]
   ustart <- lstr$ustart[i]
   latentleft <- TRUE
-  latentright <- TRUE;
+  latentright <- TRUE
+  grp <- lstr$group[i]
   
   if ("est" %in% names(lstr)) {
     est <- lstr$est[i]
@@ -40,8 +48,14 @@ for (i in 1:dim(lstr)[1]) {
   if (isknown(left)) {
     lid <- known[[left]]
   } else {
+    
+    mg <- ""
+    if (multigroup) {
+      mg <- paste("groupValue=\"",grp,"\"",sep="")
+    }
+    
     xml <- paste(xml,"<node caption=\"", left ,  "\" latent=\"",latentleft,"\" id=\"",
-                 (idx),"\" />\n",sep="");
+                 (idx),"\" ",mg," />\n",sep="");
     known[[left]] <- idx
     lid <- idx
     idx <- idx + 1
@@ -94,8 +108,14 @@ for (i in 1:dim(lstr)[1]) {
   if (isknown(right)) {
       rid <- known[[right]]
   } else {
+    
+    mg <- ""
+    if (multigroup) {
+      mg <- paste("groupValue=\"",grp,"\"",sep="")
+    }
+    
     xml <- paste(xml,"<Node caption=\"", right ,  "\" latent=\"",latentright,"\" id=\"",
-                 (idx),"\" />\n",sep="");
+                 (idx),"\" ",mg," />\n",sep="");
     known[[right]] <- idx
     rid <- idx
     idx <- idx + 1
