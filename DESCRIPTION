@@ -3,12 +3,16 @@ Type: Package
 Title: Interface to call Onyx from R
 Date: 2016-12-11
 Author: Andreas M. Brandmaier <andy@brandmaier.de>
+Maintainer: Andreas M. Brandmaier <andy@brandmaier.de>
+Description: Exports OpenMx and lavaan SEM specifications to Onyx XML and allows to directly call onyx from R. 
 Imports:
     OpenMx,
     lavaan,
     png
 Version: 0.1
 License: LGPLv3
+Depends:
+    R (>= 3.2.0)
 Suggests:
     knitr,
     rmarkdown
