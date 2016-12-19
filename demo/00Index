@@ -1,4 +1,7 @@
-lavaanHS	HS model specified in lavaan
+lavaanHS	HS model specified in lavaan string representation
+lavvanHSfit HS model specified and fitted in lavaan
 lavaanPD	lavaan political democracy dataset
 openmxFactor	Single factor model in OpenMx
 lavaanMediation Mediation model in lavaan
+lavaanGrowth  Growth curve with lavaan
+lavaanMultigroup  Multigroup with lavaan

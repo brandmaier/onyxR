@@ -13,14 +13,30 @@ known <- list()
 
 mean.idx <- NULL
 
-isknown <- function(key)
+isknown <- function(known, key, group=FALSE)
 {
-  return(key %in% names(known))
+  if ((!group))
+    return(key %in% names(known))
+  else
+    return (paste(key,"_",group,sep="") %in% names(known))
 }
 
-setknown <- function(key, value)
+setknown <- function(known, key, value, group=FALSE)
 {
-  known[[key]] <- value
+  if ((!group))  
+    known[[key]] <- value
+  else 
+    known[[paste(key,"_",group,sep="")]] <- value
+  
+  return(known)
+}
+
+getknown <- function(known, key, group=FALSE)
+{
+  if ((!group))  
+    return(known[[key]])
+  else
+    return(known[[paste(key,"_",group,sep="")]])
 }
 
 idx <- 0
@@ -47,8 +63,9 @@ for (i in 1:dim(lstr)[1]) {
   meanpath <- FALSE
   if (op == "~1") {meanpath <- TRUE}
   
-  if (isknown(left)) {
-    lid <- known[[left]]
+  if (isknown(known, key=left, group = ifelse(multigroup,grp,FALSE))) {
+    lid <- getknown(known, left, ifelse(multigroup,grp,FALSE))#known[[left]]
+    
   } else {
     
     mg <- ""
@@ -58,7 +75,8 @@ for (i in 1:dim(lstr)[1]) {
     
     xml <- paste(xml,"<node caption=\"", left ,  "\" latent=\"",latentleft,"\" id=\"",
                  (idx),"\" ",mg," />\n",sep="");
-    known[[left]] <- idx
+    #known[[left]] <- idx
+    known <- setknown(known, key = left,value = idx, group = ifelse(multigroup,grp,FALSE))
     lid <- idx
     idx <- idx + 1
   }
@@ -107,8 +125,8 @@ for (i in 1:dim(lstr)[1]) {
   } else {
     
   
-  if (isknown(right)) {
-      rid <- known[[right]]
+  if (isknown(known, key=right, group=ifelse(multigroup,grp,FALSE))) {
+      rid <- getknown(known, key=right, group=ifelse(multigroup,grp,FALSE)) #known[[right]]
   } else {
     
     mg <- ""
@@ -118,7 +136,8 @@ for (i in 1:dim(lstr)[1]) {
     
     xml <- paste(xml,"<Node caption=\"", right ,  "\" latent=\"",latentright,"\" id=\"",
                  (idx),"\" ",mg," />\n",sep="");
-    known[[right]] <- idx
+#    known[[right]] <- idx
+    known <- setknown(known, key = right,value = idx, group = ifelse(multigroup,grp,FALSE))
     rid <- idx
     idx <- idx + 1
   }
