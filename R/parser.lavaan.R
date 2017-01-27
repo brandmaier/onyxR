@@ -7,7 +7,18 @@ if (string.representations) {
 }
 xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0-500\">\n<graph>\n",sep="");
 
-multigroup <- length(unique(lstr$group))>1
+num.groups <- length(unique(lstr$group))
+if (0 %in% unique(lstr$group)) {
+  num.groups <- num.groups - 1
+}
+
+multigroup <- num.groups>1
+
+# reorder parameter table by operator
+if (sum(lstr$op == "=~")>0) {
+  reorder.ids <- c(which(lstr$op == "=~"),which(lstr$op != "=~"))
+  lstr <- lstr[reorder.ids, ]
+}
 
 known <- list()
 
@@ -46,8 +57,8 @@ for (i in 1:dim(lstr)[1]) {
   right <- lstr$rhs[i]
   free <- lstr$free[i]
   ustart <- lstr$ustart[i]
-  latentleft <- TRUE
-  latentright <- TRUE
+  latentleft <- FALSE
+  latentright <- FALSE
   grp <- lstr$group[i]
   
   if ("est" %in% names(lstr)) {
@@ -88,6 +99,9 @@ for (i in 1:dim(lstr)[1]) {
   else {
     fixed <- "false"
     pname <- lstr$plabel[i]
+    if (lstr$label[i] != "") {
+      pname <- lstr$label[i]
+    }
     pString <- paste("parameterName=\"",pname,"\"",sep="")
   }
   
@@ -161,7 +175,9 @@ for (i in 1:dim(lstr)[1]) {
   
   }
 } 
-  
+
+# collect all information on variables
+
  
   
 xml <- paste(xml, "\n</graph>\n</model>\n" ,sep="");
