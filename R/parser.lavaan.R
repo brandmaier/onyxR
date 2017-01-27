@@ -164,7 +164,11 @@ for (i in 1:dim(lstr)[1]) {
     doubleheaded <- "false"
   
 
-  
+  if (op == "~") {
+    temp<-lid
+    lid <- rid
+    rid <- temp
+  }
   
   
 
