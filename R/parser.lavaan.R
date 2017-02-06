@@ -113,7 +113,8 @@ for (i in 1:dim(lstr)[1]) {
   # some postprocessing. Onyx does not like fixed path with zero values
   if ((op == "~~")) {
     if (value==0 && free==0) {
-      value <- 1
+#      value <- 1
+       next;  # skip (co)variances fixed to zero
     }
   }
   
