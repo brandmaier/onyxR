@@ -3,27 +3,57 @@
 # converter of OpenMx model into Onyxml
 #
 
-parser.OpenMx <- function(model, name)
+parser.OpenMx <- function(model, name="unnamed", submodel=FALSE, id.offset=0)
 {
+
+  # generate Onyx file header
+  if (!submodel) {
+    xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
+  } else {
+    xml <- ""
+  }
+  
+  has.submodels <- length(model@submodels)!=0
+  
+  # check for submodels
+  if (has.submodels) {
+    
+    for (i in 1:length(model@submodels)) {
+      smodel <- model@submodels[[i]]
+      xml <- paste(xml, parser.OpenMx(smodel, paste0(name,"_",i),submodel=TRUE, id.offset=id.offset))
+      id.offset <- id.offset + length(smodel@manifestVars)+length(smodel@latentVars)+1
+    }
+    
+  } else {
+    
+
+  
+  # check for RAM matrices
+  checkRAM = !is.null(model$matrices$A) & !is.null(model$matrices$S) & !is.null(model$matrices$F)
+  if (!checkRAM & !has.submodels) {
+    stop("Only RAM models supported!")
+  }
+  
+
+  
+  # extract latents and manifests
 	manifests <- model@manifestVars
 	latents <- model@latentVars
-	
 	variables <- c(manifests,latents)
 
-	triangle <- F;
-
-	triangleId <- length(variables)	
+	# mean structure ?
+	triangle <- FALSE;
+	triangleId <- length(variables)	+ id.offset
 	triangleXml <- paste("<Node caption=\"one\" id=\"",triangleId,"\" constant=\"true\"/>\n",sep="");
 
 
-	xml <- paste( "<model name=\"",name,"\" specificationType=\"Onyx\" specificationVersion=\"1.0\">\n<graph>\n",sep="");
-
+	  
 	xml <- paste (xml, "<!-- manifest variables -->\n",sep="")
 
 	# construct all manifest nodes
 	if (length(manifests) > 0) {
 	for (i in 1:length(manifests)) {
-		xml <- paste(xml,"<Node caption=\"", manifests[i] ,  "\" latent=\"false\" id=\"",(i-1),"\" />\n",sep="");
+		xml <- paste(xml,"<Node caption=\"", manifests[i] ,  "\" latent=\"false\" id=\"",id.offset+(i-1),"\" />\n",sep="");
 	}	
 	}
 	xml <- paste (xml, "<!-- latent variables -->\n",sep="")
@@ -31,7 +61,7 @@ parser.OpenMx <- function(model, name)
 	# construct all latent nodes
 	if (length(latents) > 0) {
 	for (i in 1:length(latents)) {
-		xml <- paste(xml,"<Node caption=\"", latents[i] ,  "\" latent=\"true\" id=\"", length(manifests)+(i-1),"\" />\n",sep="");
+		xml <- paste(xml,"<Node caption=\"", latents[i] ,  "\" latent=\"true\" id=\"", id.offset+length(manifests)+(i-1),"\" />\n",sep="");
 	}}
 	
 	
@@ -45,8 +75,8 @@ parser.OpenMx <- function(model, name)
 		for (j in 1:lenA)
 		{
 			dnames <- dimnames(model$A@labels)[[1]]
-			sourceNodeId = which(variables==dnames[j])-1;
-			targetNodeId = which(variables==dnames[i])-1;
+			sourceNodeId = id.offset + which(variables==dnames[j])-1;
+			targetNodeId = id.offset + which(variables==dnames[i])-1;
 			
 			fixed <- !A@free[i,j];
 			value <- A@values[i,j];
@@ -87,8 +117,8 @@ parser.OpenMx <- function(model, name)
 		{
 			
 			dnames <- dimnames(model$S@labels)[[1]]
-			sourceNodeId = which(variables==dnames[i])-1;
-			targetNodeId = which(variables==dnames[j])-1;
+			sourceNodeId = id.offset + which(variables==dnames[i])-1;
+			targetNodeId = id.offset + which(variables==dnames[j])-1;
 			
 			fixed <- !S@free[i,j];
 			value <- S@values[i,j];
@@ -119,7 +149,7 @@ parser.OpenMx <- function(model, name)
 		{
 			dnames <- dimnames(model$M@labels)[[2]]
 			sourceNodeId = triangleId;
-			targetNodeId = which(variables==dnames[j])-1;
+			targetNodeId = id.offset + which(variables==dnames[j])-1;
 			
 			fixed <- !M@free[1,j];
 			value <- M@values[1,j];
@@ -131,7 +161,7 @@ parser.OpenMx <- function(model, name)
 			
 			if (!triangle) {
 				xml <- paste(xml, triangleXml);
-				triangle <- T;
+				triangle <- TRUE;
 			}
 			
 			label <- M@labels[1,j];
@@ -145,7 +175,12 @@ parser.OpenMx <- function(model, name)
 		}
 	}
 	
-	xml <- paste(xml, "\n</graph>\n</model>\n" ,sep="");
+		
+  }
+
+  if (!submodel)
+    xml <- paste(xml, "\n</graph>\n</model>\n" ,sep="");		
+
 	return(xml);
 }
 
