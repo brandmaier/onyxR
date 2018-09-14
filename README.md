@@ -27,7 +27,7 @@ fit <- cfa(HS.model, data = HolzingerSwineford1939)
 summary(fit, fit.measures = TRUE)
 
 onyx(fit)
-```
+````
 
 Alternatively, we can use onyxR to generate a path diagram for an OpenMx RAM-type model:
 
