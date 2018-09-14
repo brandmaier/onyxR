@@ -48,7 +48,7 @@ factorModel <- mxModel("One Factor",
 fit <- mxRun(factorModel)
 
 onyx(fit)
-```
+````
 
 ![openmx](https://github.com/brandmaier/onyxR/blob/master/inst/openmx-factor.png?raw=true)
 
