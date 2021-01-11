@@ -55,7 +55,7 @@ parser.lavaan <-
     if (sum(lstr$op == "=~") > 0) {
       reorder.ids <- c(which(lstr$op == "=="), 
                        which(lstr$op == "=~"), 
-                       which(lstr$op != "=~" && lstr$op != "==") )
+                       which(lstr$op != "=~" & lstr$op != "==") )
       lstr <- lstr[reorder.ids,]
     }
     
