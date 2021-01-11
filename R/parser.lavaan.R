@@ -64,7 +64,7 @@ parser.lavaan <-
     mean.idx <- NULL
     
     fixed_parms <- list()
-
+    mapped_parms <- list()
     
     idx <- 0
     for (i in 1:dim(lstr)[1]) {
@@ -77,6 +77,7 @@ parser.lavaan <-
       latentright <- FALSE
       grp <- lstr$group[i]
       plabel <- lstr$plabel[i]
+      label <- lstr$label[i]     
       
       if ("est" %in% names(lstr)) {
         est <- lstr$est[i]
@@ -87,6 +88,12 @@ parser.lavaan <-
       if (!is.null(fixed_parms[[plabel]])) {
         free <- 0
         ustart <- fixed_parms[[plabel]]        
+      }
+      
+      if (!is.null(mapped_parms[[plabel]])) {
+        mapped_plabel <- mapped_parms[[plabel]]
+        plabel <- mapped_plabel
+        label <- lstr$label[lstr$plabel==mapped_plabel]
       }
       
       if (op == "=~") {
@@ -102,6 +109,7 @@ parser.lavaan <-
           numeric_right <- as.numeric(right)
         })
         if ((is.na(numeric_right)) || (right != as.character(numeric_right))) {
+          mapped_parms[[left]] <- right 
           next
         }
         # if this is a numeric equality constraint, save it for later
@@ -160,9 +168,9 @@ parser.lavaan <-
       }
       else {
         fixed <- "false"
-        pname <- lstr$plabel[i]
-        if (lstr$label[i] != "") {
-          pname <- lstr$label[i]
+        pname <- plabel
+        if (label != "") {
+          pname <- label
         }
         pString <- paste("parameterName=\"", pname, "\"", sep = "")
       }
