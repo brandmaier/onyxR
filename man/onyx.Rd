@@ -4,15 +4,19 @@
 \alias{onyx}
 \title{onyx}
 \usage{
-onyx(model = NULL, onyxfile = NULL)
+onyx(model = NULL, onyxfile = NULL, batch = NULL)
 }
 \arguments{
-\item{model}{An OpenMx or lavaan model.}
+\item{model}{An OpenMx or lavaan model. Defaults to NULL. If omitted, Onyx is started with an empty desktop, otherwise
+the specified model is rendered as path diagram}
 
 \item{onyyfile}{path to Onyx executable (onyx-***.jar). Defaults to NULL. If NULL, Onyx searches local directors, otherwise downloads Onyx from official repository.}
+
+\item{mode}{batch operation mode (experimental)}
 }
 \description{
-Starts Onyx
+Starts Onyx executable to display a path diagram from either an OpenMx or
+lavaan model representation.
 }
 \examples{
 
@@ -36,4 +40,3 @@ onyx(fit)
 }
 
 }
-
