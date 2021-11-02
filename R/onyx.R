@@ -72,7 +72,7 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
     warning("Could not find a local Onyx version. Trying to download Onyx from the official repository.")
     onyxfile <- tempfile(pattern="onyx_",
                          fileext=".jar")
-    download.file(url="http://onyx.brandmaier.de/onyx-1.0-1013.jar",
+    download.file(url="https://onyx-sem.com/wp-content/uploads/2021/08/onyx-stable.jar",
                   destfile = onyxfile, mode="wb")
     if (!file.exists(onyxfile)) {
       stop("Download failed!")
