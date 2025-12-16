@@ -37,7 +37,7 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
 {
   sysname <- Sys.info()[['sysname']]
   
-  if (isFALSE(nzchar(Sys.which("java")))) {
+  if (isFALSE(nzchar(Sys.which("java"))) && java_path=="") {
     warning("It seems that java is not on your file path. Consider setting the java_path argument when calling onyR().")
   }
   
