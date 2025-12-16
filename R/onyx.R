@@ -35,6 +35,7 @@ cacheEnv <- new.env()
 
 onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
 {
+  sysname <- Sys.info()[['sysname']]
   
   if (isFALSE(nzchar(Sys.which("java")))) {
     warning("It seems that java is not on your file path. Consider setting the java_path argument when calling onyR().")
@@ -48,6 +49,7 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
   # return NULL if nothing stored in cacheEnv
   if (is.null(onyxfile)) {
     onyxfile <- get0("onyxfile", envir=cacheEnv, ifnotfound=NULL)
+    if (!file.exists(onyxfile)) onyxfile = NULL # check if temp file was deleted meanwhile
   }
   
   # is there a local onyx file?
@@ -74,6 +76,12 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
   #  }
 
   #}
+  if (sysname=="Windows") {
+    java_file <- "java.exe"
+  } else {
+    java_file <- "java"
+  }
+  java_call <- paste0(java_path,java_file,collapse="")
   
   # if there is no Onyx jar, download it from official repository
   if (is.null(onyxfile)) {
@@ -121,19 +129,19 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
   	cat(rep, file=fn)
   	
   	if (is.null(batch)) {
-    	cmd <- paste(java_path,"java","-cp",onyxfile,"Master","--input-file ",fn)
+    	cmd <- paste(java_call,"-cp",onyxfile,"Master","--input-file ",fn)
   	} else {
   	  outf <- tempfile(fileext = ".png")
-  	  cmd <- paste(java_path,"java -cp",onyxfile," Master --batch --output-filetype png --input-file",fn," --output-file",outf)
+  	  cmd <- paste(java_call," -cp",onyxfile," Master --batch --output-filetype png --input-file",fn," --output-file",outf)
 
   	}
   	
   } else {
-    cmd <- paste(java_path,"java","-cp",onyxfile,"Master")
+    cmd <- paste(java_call,"-cp",onyxfile,"Master")
   }
   
   # system call depends on operating system
-  sysname <- Sys.info()[['sysname']]
+
   if (sysname=="Windows") {
     # OS that need to spawn a new shell explicitly should go here:
     system("cmd.exe", input = cmd, wait = FALSE)
