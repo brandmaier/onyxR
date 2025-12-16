@@ -33,8 +33,16 @@ cacheEnv <- new.env()
 #' 
 #' @export
 
-onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
+onyx<-function(model=NULL, onyxfile=NULL, batch=NULL, java_path="")
 {
+  
+  if (isFALSE(nzchar(Sys.which("java")))) {
+    warning("It seems that java is not on your file path. Consider setting the java_path argument when calling onyR().")
+  }
+  
+  if (java_path != "") {
+    java_path = add_trailing_sep(java_path) 
+  }
  
   # attempt to retrieve the onyxfile from the package's cache environment
   # return NULL if nothing stored in cacheEnv
@@ -113,15 +121,15 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
   	cat(rep, file=fn)
   	
   	if (is.null(batch)) {
-    	cmd <- paste("java","-cp",onyxfile,"Master","--input-file ",fn)
+    	cmd <- paste(java_path,"java","-cp",onyxfile,"Master","--input-file ",fn)
   	} else {
   	  outf <- tempfile(fileext = ".png")
-  	  cmd <- paste("java -cp",onyxfile," Master --batch --output-filetype png --input-file",fn," --output-file",outf)
+  	  cmd <- paste(java_path,"java -cp",onyxfile," Master --batch --output-filetype png --input-file",fn," --output-file",outf)
 
   	}
   	
   } else {
-    cmd <- paste("java","-cp",onyxfile,"Master")
+    cmd <- paste(java_path,"java","-cp",onyxfile,"Master")
   }
   
   # system call depends on operating system
@@ -140,4 +148,12 @@ onyx<-function(model=NULL, onyxfile=NULL, batch=NULL)
     rasterImage(rpng,0,0,100,100)
   }
   
+}
+
+add_trailing_sep <- function(path) {
+  sep <- .Platform$file.sep
+  if (!grepl(paste0(sep, "$"), path)) {
+    path <- paste0(path, sep)
+  }
+  path
 }
