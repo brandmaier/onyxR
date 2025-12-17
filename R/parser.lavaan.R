@@ -28,7 +28,11 @@ getknown <- function(known, key, group = FALSE)
 parser.lavaan <-
   function(model,
            name = "",
-           string.representations = FALSE) {
+           string.representations = NULL) {
+    
+    if (is.null(string.representations)) {
+      string.representations = inherits(model, "character")
+    }
     
     if (string.representations) {
       lstr <- lavaan::lavaanify(model, auto.var = TRUE)
